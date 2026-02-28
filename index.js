@@ -1,12 +1,6 @@
-import express from "express";
-import cors from "cors";
 import OpenAI from "openai";
 
-const app = express();
-app.use(cors());
-
-// Endpoint principal de TripNova
-app.get("/api/automation", async (req, res) => {
+export default async function handler(req, res) {
   try {
     const client = new OpenAI({
       apiKey: process.env.OPENROUTER_API_KEY,
@@ -65,16 +59,10 @@ Devuelve SOLO el JSON, sin texto adicional.
     });
 
     const text = ai.choices[0].message.content;
-    res.json(JSON.parse(text));
+    res.status(200).json(JSON.parse(text));
 
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: error.message });
   }
-});
-
-// Servidor
-app.listen(3000, () => {
-  console.log("TripNova API running on port 3000");
-});
-
+}
