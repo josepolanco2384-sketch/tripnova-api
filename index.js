@@ -5,15 +5,16 @@ import OpenAI from "openai";
 const app = express();
 app.use(cors());
 
+// Endpoint principal de TripNova
 app.get("/api/automation", async (req, res) => {
   try {
     const client = new OpenAI({
-      apiKey: process.env.DEEPSEEK_API_KEY,
-      baseURL: "https://api.deepseek.com"
+      apiKey: process.env.OPENROUTER_API_KEY,
+      baseURL: "https://openrouter.ai/api/v1"
     });
 
     const ai = await client.chat.completions.create({
-      model: "deepseek-chat",
+      model: "meta-llama/llama-3-70b-instruct",
       messages: [
         {
           role: "system",
@@ -57,6 +58,7 @@ Genera un JSON limpio con:
 
 Usa tendencias globales, temporada, clima y país del visitante.
 Usa imágenes reales de Unsplash.
+Devuelve SOLO el JSON, sin texto adicional.
 `
         }
       ]
@@ -66,10 +68,12 @@ Usa imágenes reales de Unsplash.
     res.json(JSON.parse(text));
 
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: error.message });
   }
 });
 
+// Servidor
 app.listen(3000, () => {
   console.log("TripNova API running on port 3000");
 });
