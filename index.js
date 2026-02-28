@@ -77,3 +77,4 @@ Devuelve SOLO el JSON, sin texto adicional.
 app.listen(3000, () => {
   console.log("TripNova API running on port 3000");
 });
+
